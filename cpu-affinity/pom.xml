@@ -65,6 +65,15 @@
         <groupId>com.github.maven-nar</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <version>${nar-maven-plugin.version}</version>
+
+        <!-- CUSTOM ADDITION -->
+        <configuration>
+          <aol>x86-Windows-g++</aol>
+          <linker>
+            <name>g++</name>
+          </linker>
+        </configuration>
+
         <extensions>true</extensions>
       </plugin>
       <plugin>
@@ -116,6 +125,15 @@
             <groupId>com.github.maven-nar</groupId>
             <artifactId>nar-maven-plugin</artifactId>
             <version>${nar-maven-plugin.version}</version>
+
+            <!-- CUSTOM ADDITION -->
+            <configuration>
+              <aol>x86-Windows-g++</aol>
+              <linker>
+                <name>g++</name>
+              </linker>
+            </configuration>
+
             <extensions>true</extensions>
             <executions>
                <execution>
