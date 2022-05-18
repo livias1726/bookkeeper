@@ -71,7 +71,6 @@
     <module>shaded</module>
     <module>microbenchmarks</module>
     <module>tests</module>
-	<module>isw2-tests</module>
   </modules>
   <mailingLists>
     <mailingList>

@@ -21,12 +21,12 @@
         <!-- Sonar -->
         <sonar.organization>livias1726</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports/*.xml</sonar.junit.reportPaths>
-        <sonar.coverage.jacoco.xmlReportPaths>isw2-tests/target/coverage-reports/jacoco-reports/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-
+       <!-- <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports</sonar.junit.reportPaths> -->
+        <sonar.coverage.jacoco.xmlReportPaths>target/coverage-reports/jacoco-reports</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
+        <!-- MULTI-MODULE DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>bookkeeper-benchmark</artifactId>
@@ -42,14 +42,50 @@
             <artifactId>bookkeeper-common-allocator</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- POM -->
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>bookkeeper-dist</artifactId>
             <version>${project.parent.version}</version>
+            <type>pom</type>
         </dependency>
+        <!--
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-dist-all</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bkctl</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-dist-server</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM -->
         <dependency>
             <groupId>org.apache.bookkeeper.http</groupId>
             <artifactId>bookkeeper-http</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.http</groupId>
+            <artifactId>http-server</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.http</groupId>
+            <artifactId>servlet-http-server</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.http</groupId>
+            <artifactId>vertx-http-server</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -62,85 +98,428 @@
             <artifactId>bookkeeper-server</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+       <dependency>
+           <groupId>org.apache.bookkeeper.stats</groupId>
+           <artifactId>bookkeeper-stats-api</artifactId>
+           <version>${project.parent.version}</version>
+       </dependency>
+        <!-- POM -->
+      <dependency>
+          <groupId>org.apache.bookkeeper</groupId>
+          <artifactId>bookkeeper-stats-providers</artifactId>
+          <version>${project.parent.version}</version>
+          <type>pom</type>
+      </dependency>
         <dependency>
             <groupId>org.apache.bookkeeper.stats</groupId>
-            <artifactId>bookkeeper-stats-api</artifactId>
+            <artifactId>codahale-metrics-provider</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>bookkeeper-stats-providers</artifactId>
+            <groupId>org.apache.bookkeeper.stats</groupId>
+            <artifactId>prometheus-metrics-provider</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>buildtools</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>circe-checksum</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>cpu-affinity</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+      <dependency>
+          <groupId>org.apache.bookkeeper</groupId>
+          <artifactId>buildtools</artifactId>
+          <version>${project.parent.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.bookkeeper</groupId>
+          <artifactId>circe-checksum</artifactId>
+          <version>${project.parent.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.bookkeeper</groupId>
+          <artifactId>cpu-affinity</artifactId>
+          <version>${project.parent.version}</version>
+      </dependency>
+        <!-- POM -->
+     <dependency>
+         <groupId>org.apache.bookkeeper.metadata.drivers</groupId>
+         <artifactId>metadata-drivers-parent</artifactId>
+         <version>${project.parent.version}</version>
+         <type>pom</type>
+     </dependency>
         <dependency>
             <groupId>org.apache.bookkeeper.metadata.drivers</groupId>
-            <artifactId>metadata-drivers-parent</artifactId>
+            <artifactId>metadata-stores-etcd</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+     <dependency>
+         <groupId>org.apache.bookkeeper</groupId>
+         <artifactId>microbenchmarks</artifactId>
+         <version>${project.parent.version}</version>
+     </dependency>
+        <!-- POM -->
+     <dependency>
+         <groupId>org.apache.bookkeeper</groupId>
+         <artifactId>shaded-parent</artifactId>
+         <version>${project.parent.version}</version>
+         <type>pom</type>
+     </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-server-shaded</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>microbenchmarks</artifactId>
+            <artifactId>bookkeeper-server-tests-shaded</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>shaded-parent</artifactId>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog-core-shaded</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- POM -->
+         <dependency>
+             <groupId>org.apache.bookkeeper.stats</groupId>
+             <artifactId>bookkeeper-stats-parent</artifactId>
+             <version>${project.parent.version}</version>
+             <type>pom</type>
+         </dependency>
         <dependency>
             <groupId>org.apache.bookkeeper.stats</groupId>
-            <artifactId>bookkeeper-stats-parent</artifactId>
+            <artifactId>bookkeeper-stats-utils</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- POM -->
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>stream-storage-parent</artifactId>
             <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>org.apache.bookkeeper.tests</groupId>
-            <artifactId>tests-parent</artifactId>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog-protocol</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>distributedlog-io</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.distributedlog</groupId>
+            <artifactId>dlfs</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
-            <artifactId>bookkeeper-tools-parent</artifactId>
+            <artifactId>stream-storage-common</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>stream-storage-tests-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>statelib</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-proto</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-clients-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-java-client-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-java-client</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-java-client-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-java-kv-client</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-service-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-service-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-service-impl</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-server</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bk-grpc-name-resolver</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- POM -->
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>tests-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>integration-tests-base</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        -->
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>integration-tests-base-groovy</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>integration-tests-topologies</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>integration-tests-utils</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>scripts</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>backward-compat</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>upgrade</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>upgrade-direct</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>hierarchical-ledger-manager</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>hostname-bookieid</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>recovery-no-password</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>old-cookie-new-cluster</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>backward-compat-current-server-old-clients</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>yahoo-custom-version</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.backward-compat</groupId>
+            <artifactId>bc-non-fips</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>docker-images</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>all-released-versions-image</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>all-versions-image</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests</groupId>
+            <artifactId>integration</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.integration</groupId>
+            <artifactId>cluster</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.integration</groupId>
+            <artifactId>smoke</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.integration</groupId>
+            <artifactId>standalone</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.shaded</groupId>
+            <artifactId>shaded-tests-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.shaded</groupId>
+            <artifactId>bookkeeper-server-shaded-test</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.shaded</groupId>
+            <artifactId>bookkeeper-server-tests-shaded-test</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper.tests.shaded</groupId>
+            <artifactId>distributedlog-core-shaded-test</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+        <!-- POM -->
+         <dependency>
+             <groupId>org.apache.bookkeeper</groupId>
+             <artifactId>bookkeeper-tools-parent</artifactId>
+             <version>${project.parent.version}</version>
+             <type>pom</type>
+         </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-tools</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-tools-framework</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-tools-ledger</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>bookkeeper-perf</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bookkeeper</groupId>
+            <artifactId>stream-storage-cli</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- OTHERS -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>0.8.8</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <pluginManagement>
         <plugins>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
                 <configuration>
-                    <argLine>
-                        -javaagent:jars/jacoco/jacocoagent.jar=destfile=target/coverage-reports/jacoco.exec
-                    </argLine>
-                    <reportsDirectory>isw2-tests/target/coverage-reports/surefire-reports</reportsDirectory>
+                    <reportsDirectory>target/coverage-reports/surefire-reports</reportsDirectory>
                 </configuration>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <goals>
@@ -148,19 +527,17 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
-                        <phase>verify</phase>
                         <configuration>
-                            <dataFile>isw2-tests/target/coverage-reports/jacoco.exec</dataFile>
-                            <outputDirectory>isw2-tests/target/coverage-reports/jacoco-reports</outputDirectory>
+                            <outputDirectory>target/coverage-reports/jacoco-reports</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        </pluginManagement>
     </build>
 </project>
