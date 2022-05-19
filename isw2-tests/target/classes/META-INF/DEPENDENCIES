@@ -15,8 +15,6 @@ From: 'an unknown organization'
     License: Apache 2.0  (http://www.apache.org/licenses/LICENSE-2.0)
   - FindBugs-jsr305 (http://findbugs.sourceforge.net/) com.google.code.findbugs:jsr305:jar:3.0.2
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
-  - Gson (https://github.com/google/gson/gson) com.google.code.gson:gson:jar:2.8.6
-    License: Apache 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - Guava InternalFutureFailureAccess and InternalFutures (https://github.com/google/guava/failureaccess) com.google.guava:failureaccess:bundle:1.0.1
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - Guava: Google Core Libraries for Java (https://github.com/google/guava) com.google.guava:guava:bundle:31.0.1-jre
@@ -60,6 +58,8 @@ From: 'an unknown organization'
   - io.grpc:grpc-grpclb (https://github.com/grpc/grpc-java) io.grpc:grpc-grpclb:jar:1.42.1
     License: Apache 2.0  (https://opensource.org/licenses/Apache-2.0)
   - io.grpc:grpc-netty (https://github.com/grpc/grpc-java) io.grpc:grpc-netty:jar:1.42.1
+    License: Apache 2.0  (https://opensource.org/licenses/Apache-2.0)
+  - io.grpc:grpc-netty-shaded (https://github.com/grpc/grpc-java) io.grpc:grpc-netty-shaded:jar:1.42.1
     License: Apache 2.0  (https://opensource.org/licenses/Apache-2.0)
   - io.grpc:grpc-protobuf (https://github.com/grpc/grpc-java) io.grpc:grpc-protobuf:jar:1.42.1
     License: Apache 2.0  (https://opensource.org/licenses/Apache-2.0)
@@ -228,6 +228,10 @@ From: 'Google LLC'
   - proto-google-common-protos (https://github.com/googleapis/java-iam/proto-google-common-protos) com.google.api.grpc:proto-google-common-protos:jar:2.0.1
     License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+From: 'Google, Inc.' (http://www.google.com)
+  - Gson (http://code.google.com/p/google-gson/) com.google.code.gson:gson:jar:2.2.4
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 From: 'JCraft,Inc.' (http://www.jcraft.com/)
   - JSch (http://www.jcraft.com/jsch/) com.jcraft:jsch:jar:0.1.54
     License: Revised BSD  (http://www.jcraft.com/jsch/LICENSE.txt)
@@ -340,6 +344,8 @@ From: 'The Apache Software Foundation' (https://www.apache.org/)
   - Apache BookKeeper :: Tools :: Perf (http://bookkeeeper.apache.org/bookkeeper-tools-parent/bookkeeper-perf) org.apache.bookkeeper:bookkeeper-perf:jar:4.16.0-SNAPSHOT
     License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - Apache BookKeeper :: Protocols (http://bookkeeeper.apache.org/bookkeeper-proto) org.apache.bookkeeper:bookkeeper-proto:jar:4.16.0-SNAPSHOT
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache BookKeeper :: Server (http://bookkeeeper.apache.org/bookkeeper-server) org.apache.bookkeeper:bookkeeper-server:jar:4.16.0-SNAPSHOT
     License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - Apache BookKeeper :: Server (http://bookkeeeper.apache.org/bookkeeper-server) org.apache.bookkeeper:bookkeeper-server:jar:4.16.0-SNAPSHOT
     License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
