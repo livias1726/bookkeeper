@@ -19,10 +19,12 @@
         <maven.compiler.target>8</maven.compiler.target>
 
         <!-- Sonar -->
+        <!--
         <sonar.organization>livias1726</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-       <!-- <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports</sonar.junit.reportPaths> -->
+        <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports</sonar.junit.reportPaths>
         <sonar.coverage.jacoco.xmlReportPaths>target/coverage-reports/jacoco-reports</sonar.coverage.jacoco.xmlReportPaths>
+        -->
     </properties>
 
     <dependencies>
@@ -187,7 +189,6 @@
             <artifactId>bk-grpc-name-resolver</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!--
         <dependency>
             <groupId>org.apache.bookkeeper.tests</groupId>
             <artifactId>integration-tests-topologies</artifactId>
@@ -198,7 +199,6 @@
             <artifactId>integration-tests-utils</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        -->
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>bookkeeper-tools-framework</artifactId>
@@ -227,30 +227,22 @@
             <version>0.8.8</version>
             <scope>test</scope>
         </dependency>
+        <!-- Needed to avoid failure for integration-tests-topologies and integration-tests-utils -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>3.0.10</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <configuration>
-                    <reportsDirectory>target/coverage-reports/surefire-reports</reportsDirectory>
-                </configuration>
-            </plugin>
-            -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.8</version>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
                     <execution>
                         <id>report-aggregate</id>
                         <phase>verify</phase>
