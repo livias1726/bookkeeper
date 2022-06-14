@@ -917,15 +917,11 @@
 	      </compilerArgs>
         </configuration>
       </plugin>
+      <!-- ISW2 - CUSTOM CONFIGURATION
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
-        <!-- ISW2 - CUSTOM CONFIGURATION -->
-        <configuration>
-          <reportsDirectory>${surefire.report.dir}</reportsDirectory>
-        </configuration>
-        <!--
         <configuration>
           <argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid</argLine>
           <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
@@ -935,9 +931,8 @@
           <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
           <rerunFailingTestsCount>${testRetryCount}</rerunFailingTestsCount>
         </configuration>
-        -->
-
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>

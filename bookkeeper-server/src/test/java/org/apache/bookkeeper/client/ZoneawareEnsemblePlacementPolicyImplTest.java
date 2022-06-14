@@ -93,7 +93,7 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
             conf.setMinNumZonesPerWriteQuorum(minNumOfZones);
             conf.setProperty(REPP_DNS_RESOLVER_CLASS, StaticDNSResolver.class.getName());
 
-            policy.initialize(conf, Optional.empty(), new HashedWheelTimer(), DISABLE_ALL,
+            policy.initialize(conf, Optional.empty(), null, DISABLE_ALL,
                     NullStatsLogger.INSTANCE, BookieSocketAddress.LEGACY_BOOKIEID_RESOLVER);
 
             oracle();
