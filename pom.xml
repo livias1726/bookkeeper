@@ -917,22 +917,27 @@
 	      </compilerArgs>
         </configuration>
       </plugin>
-      <!-- ISW2 - CUSTOM CONFIGURATION
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
+
         <configuration>
-          <argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid</argLine>
-          <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
-          <forkCount>${forkCount.variable}</forkCount>
-          <reuseForks>false</reuseForks>
-          <trimStackTrace>false</trimStackTrace>
-          <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-          <rerunFailingTestsCount>${testRetryCount}</rerunFailingTestsCount>
+          <reportsDirectory>${surefire.reportDir}</reportsDirectory>
         </configuration>
-      </plugin>
+      <!-- ISW2 - CUSTOM CONFIGURATION
+      <configuration>
+        <argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid</argLine>
+        <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
+        <forkCount>${forkCount.variable}</forkCount>
+        <reuseForks>false</reuseForks>
+        <trimStackTrace>false</trimStackTrace>
+        <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+        <rerunFailingTestsCount>${testRetryCount}</rerunFailingTestsCount>
+      </configuration>
       -->
+    </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -1253,6 +1258,7 @@
       </activation>
       <build>
         <plugins>
+          <!--
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-surefire-plugin</artifactId>
@@ -1261,6 +1267,7 @@
                   <reportsDirectory>${surefire.reportDir}</reportsDirectory>
               </configuration>
           </plugin>
+          -->
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
