@@ -23,8 +23,8 @@
         <sonar.organization>livias1726</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports</sonar.junit.reportPaths>
-        <sonar.coverage.jacoco.xmlReportPaths>target/coverage-reports/jacoco-reports</sonar.coverage.jacoco.xmlReportPaths>
         -->
+        <sonar.coverage.jacoco.xmlReportPaths>target/coverage-reports/jacoco-reports/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
