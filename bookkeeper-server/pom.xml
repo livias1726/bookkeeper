@@ -276,12 +276,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
-
-      <!-- ISW2
-      <configuration>
+        <configuration>
           <testFailureIgnore>true</testFailureIgnore>
         </configuration>
 
+      <!-- ISW2
       <configuration>
         <trimStackTrace>false</trimStackTrace>
         <properties>
