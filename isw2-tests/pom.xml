@@ -29,6 +29,7 @@
 
     <dependencies>
         <!-- MULTI-MODULE DEPENDENCIES -->
+        <!--
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>bookkeeper-benchmark</artifactId>
@@ -64,11 +65,13 @@
             <artifactId>bookkeeper-proto</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.bookkeeper</groupId>
             <artifactId>bookkeeper-server</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!--
        <dependency>
            <groupId>org.apache.bookkeeper.stats</groupId>
            <artifactId>bookkeeper-stats-api</artifactId>
@@ -219,6 +222,7 @@
             <artifactId>stream-storage-cli</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        -->
 
         <!-- OTHERS -->
         <dependency>
@@ -241,16 +245,15 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
                 <executions>
                     <execution>
-                        <id>report-aggregate</id>
-                        <phase>verify</phase>
+                        <id>report</id>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
+                        <phase>verify</phase>
                         <configuration>
-                            <outputDirectory>target/coverage-reports/jacoco-reports</outputDirectory>
+                            <outputDirectory>${jacoco.report.dir}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

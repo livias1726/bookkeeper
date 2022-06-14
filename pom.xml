@@ -107,25 +107,24 @@
     </developer>
   </developers>
   <properties>
-                                                  <!-- TODO ISW2 -->
-    <!-- Utils -->
-    <coverage.reportDir>../isw2-tests/target/coverage-reports</coverage.reportDir>
-    <!-- Jacoco -->
-    <jacoco.reportDir>${coverage.reportDir}/jacoco-reports</jacoco.reportDir>
-    <!--
-    <jacoco.agent>-javaagent:jars/jacoco/jacocoagent.jar</jacoco.agent>
-    -->
-    <!-- Surefire -->
-    <surefire.reportDir>${coverage.reportDir}/surefire-reports</surefire.reportDir>
-    <!--
-    <surefire.jacoco>${jacoco.agent}=destfile=${coverage.reportDir}/jacoco-ut.exec</surefire.jacoco>
-    -->
-    <!-- Sonar -->
+    <!--  ISW2  -->
+    <coverage.report.dir>target/coverage-reports</coverage.report.dir>
+    <surefire.report.dir>${coverage.report.dir}/surefire-reports</surefire.report.dir>
+
+    <jacoco.report.dir>${coverage.report.dir}/jacoco-reports</jacoco.report.dir>
+    <badua.report.dir>${coverage.report.dir}/badua-reports</badua.report.dir>
+    <pit.report.dir>${coverage.report.dir}/pit-reports</pit.report.dir>
+
+    <badua.report.dir.win>target\coverage-reports\badua-reports</badua.report.dir.win>
+    <badua.output>target/badua.ser</badua.output>
+    <badua.jar.agent>jars/badua/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar</badua.jar.agent>
+    <badua.jar.cli>jars/badua/ba-dua-cli-0.4.1-SNAPSHOT-all.jar</badua.jar.cli>
+
     <sonar.organization>livias1726</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.coverage.jacoco.xmlReportPaths>${jacoco.reportDir}/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.junit.reportPaths>${surefire.reportDir}</sonar.junit.reportPaths>
-                                                  <!-- TODO /ISW2 -->
+    <sonar.coverage.jacoco.xmlReportPaths>isw2-tests/${jacoco.report.dir}/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.junit.reportPaths>${surefire.report.dir}</sonar.junit.reportPaths>
+    <!--  ISW2  -->
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -924,6 +923,10 @@
         <version>${maven-surefire-plugin.version}</version>
         <!-- ISW2 - CUSTOM CONFIGURATION -->
         <configuration>
+          <reportsDirectory>${surefire.report.dir}</reportsDirectory>
+        </configuration>
+        <!--
+        <configuration>
           <argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid</argLine>
           <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
           <forkCount>${forkCount.variable}</forkCount>
@@ -932,6 +935,7 @@
           <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
           <rerunFailingTestsCount>${testRetryCount}</rerunFailingTestsCount>
         </configuration>
+        -->
 
       </plugin>
       <plugin>
@@ -1245,11 +1249,16 @@
         </plugins>
       </build>
     </profile>
+
     <!-- ISW2 -->
     <profile>
       <id>isw2-coverage</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <build>
         <plugins>
+          <!--
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-surefire-plugin</artifactId>
@@ -1258,19 +1267,61 @@
                   <reportsDirectory>${surefire.reportDir}</reportsDirectory>
               </configuration>
           </plugin>
+          -->
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.8</version>
             <executions>
               <execution>
-                <id>prepare-agent</id>
+                <id>prepare-agent-ut</id>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
-                <configuration>
-                  <destFile>${coverage.reportDir}/jacoco-ut.exec</destFile>
-                </configuration>
+              </execution>
+              <!--  Integration-tests executed with failsafe-plugin  -->
+              <!--
+              <execution>
+                  <id>prepare-agent-it</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>prepare-agent-integration</goal>
+                  </goals>
+                  <configuration>
+                      <append>true</append>
+                      <destFile>${coverage.reportDir}/jacoco-it.exec</destFile>
+                  </configuration>
+              </execution>
+               -->
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>isw2-mutation</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.8.0</version>
+            <configuration>
+              <outputFormats>
+                <param>HTML</param>
+                <param>XML</param>
+              </outputFormats>
+              <verbose>true</verbose>
+              <exportLineCoverage>true</exportLineCoverage>
+              <timestampedReports>false</timestampedReports>
+            </configuration>
+            <executions>
+              <execution>
+                <id>pitest-mutation-coverage</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>mutationCoverage</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>

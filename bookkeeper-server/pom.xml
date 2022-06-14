@@ -24,7 +24,36 @@
   </parent>
   <artifactId>bookkeeper-server</artifactId>
   <name>Apache BookKeeper :: Server</name>
+
+  <!-- ISW2 -->
+  <properties>
+    <target.class>target/classes/org/apache/bookkeeper</target.class>
+    <badua.agent>-javaagent:${badua.jar.agent} -Doutput.file=${badua.output}</badua.agent>
+    <badua.windows.cli> mkdir ${badua.report.dir.win} | java -jar ${badua.jar.cli} report -classes ${target.class} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.windows.cli>
+    <badua.unix.cli> mkdir ${badua.report.dir} | java -jar ${badua.jar.cli} report -classes ${target.class} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.unix.cli>
+  </properties>
+
   <dependencies>
+    <!-- ISW2 -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>1.12.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>4.6.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>4.6.1</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.bookkeeper</groupId>
       <artifactId>bookkeeper-common</artifactId>
@@ -198,8 +227,15 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
+      <!-- ISW2 -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -245,6 +281,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
+        <!-- ISW2
         <configuration>
           <trimStackTrace>false</trimStackTrace>
           <properties>
@@ -254,6 +291,7 @@
             </property>
           </properties>
         </configuration>
+        -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -333,6 +371,141 @@
             <configuration>
               <skipTests>true</skipTests>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- ISW2 -->
+    <profile>
+      <id>isw2-mutation</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.8.0</version>
+            <configuration>
+              <targetClasses>
+                <param>org.apache.bookkeeper.client.ZoneawareEnsemblePlacementPolicyImpl</param>
+              </targetClasses>
+              <targetTests>
+                <param>org.apache.bookkeeper.client.ZoneawareEnsemblePlacementPolicyImplTest</param>
+              </targetTests>
+              <avoidCallsTo>
+                <avoidCallsTo>java.util.logging</avoidCallsTo>
+                <avoidCallsTo>org.apache.log4j</avoidCallsTo>
+                <avoidCallsTo>org.slf4j</avoidCallsTo>
+                <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
+              </avoidCallsTo>
+              <reportsDirectory>${pit.report.dir}</reportsDirectory>
+            </configuration>
+            <executions>
+              <execution>
+                <id>mutation-coverage</id>
+                <goals>
+                  <goal>mutationCoverage</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>isw2-dataflow-coverage</id>
+      <activation>
+        <property>
+          <name>isw2-dataflow-coverage</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <argLine> ${badua.agent} </argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>Windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+        <property>
+          <name>isw2-dataflow-coverage</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>badua-cli</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <executable>cmd</executable>
+                  <arguments>
+                    <argument>/C</argument>
+                    <argument>${badua.windows.cli}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+        <property>
+          <name>isw2-dataflow-coverage</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>badua-cli</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <executable>bash</executable>
+                  <arguments>
+                    <argument>-c</argument>
+                    <argument>${badua.unix.cli}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
