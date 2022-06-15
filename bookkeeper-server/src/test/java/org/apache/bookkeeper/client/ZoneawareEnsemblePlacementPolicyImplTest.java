@@ -36,9 +36,9 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         //constant fields
         private final int desiredNumOfZones = 2;
         private final int minNumOfZones = 1;
-        private final String[] zones;
 
         private ZoneawareEnsemblePlacementPolicyImpl policy;
+        private final String[] zones;
 
         private final List<BookieId> ensembleList;
         private final int writeQuorumSize;
@@ -170,7 +170,7 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         //constant fields
         private final List<BookieId> availableSet = Arrays.asList(BookieId.parse("127.0.0.1:8000"),
                                                                   BookieId.parse("127.0.0.2:8000"));
-        private final String[] zones = {"/region-a/rack-1", "/region-b/rack-1", "/region-c/rack-1"};
+        private final String[] zones = {"/region-a/rack-1", "/region-b/rack-1"};
 
         private ZoneawareEnsemblePlacementPolicyImpl policy;
 
