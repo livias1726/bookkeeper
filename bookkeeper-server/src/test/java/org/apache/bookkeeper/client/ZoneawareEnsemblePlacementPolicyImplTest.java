@@ -1,6 +1,5 @@
 package org.apache.bookkeeper.client;
 
-import io.netty.util.HashedWheelTimer;
 import org.apache.bookkeeper.conf.ClientConfiguration;
 import org.apache.bookkeeper.net.*;
 import org.apache.bookkeeper.stats.NullStatsLogger;
@@ -30,8 +29,6 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
     * If bookies in the write-set are from 'desiredNumOfZones' then it is considered as MEETS_STRICT.
     * If they are from 'minNumOfZones' then it is considered as MEETS_SOFT.
     * Otherwise, considered as FAIL.
-    *
-    * ensSize ≥ writeQuorumSize ≥ ackQuorumSize
     * */
     @RunWith(Parameterized.class)
     public static class IsEnsembleAdheringToPlacementPolicyTest{
@@ -39,7 +36,7 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         //constant fields
         private final int desiredNumOfZones = 2;
         private final int minNumOfZones = 1;
-        private final String[] zones = {"/region-a/rack-1", "/region-b/rack-1", "/region-c/rack-1"};
+        private final String[] zones;
 
         private ZoneawareEnsemblePlacementPolicyImpl policy;
 
@@ -53,20 +50,27 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         @Parameterized.Parameters
         public static Collection<Object[]> getTestParameters() {
             Object[][] params = {
-                    {null, 1, 2}, //ensembleList cannot be null
-                    {new ArrayList<>(), 2, 1},
-                    {new ArrayList<>(), 0, 0}, //writeQuorum cannot be 0
-                    //{Collections.singletonList(BookieId.parse("127.0.0.1:8000")), 1, 1}, //return FAIL but should return SOFT?
-                    {Arrays.asList(BookieId.parse("127.0.0.1:8000"), BookieId.parse("127.0.0.2:8000")), 2, 1}
+                    {null, 1, 2, null},
+                    {new ArrayList<>(), 2, 1, null},
+                    {new ArrayList<>(), 0, 0, null},
+                    {Collections.singletonList(BookieId.parse("127.0.0.1:8000")), 1, 1, new String[]{"/region-a/rack-1"}},
+                    {Arrays.asList(BookieId.parse("127.0.0.1:8000"), BookieId.parse("127.0.0.2:8000")), 2, 1,
+                            new String[]{"/region-a/rack-1", "/region-a/rack-2"}},
+                    {Arrays.asList(BookieId.parse("127.0.0.1:8000"), BookieId.parse("127.0.0.2:8000")), 2, 1,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
+                    {Collections.singletonList(BookieId.parse("127.0.0.1:8000")), -2, -1, new String[]{"/region-a/rack-1"}},
+                    {Collections.singletonList(BookieId.parse("127.0.0.1:8000")), 2, -2, new String[]{"/region-a/rack-1"}},
             };
 
             return Arrays.asList(params);
         }
 
-        public IsEnsembleAdheringToPlacementPolicyTest(List<BookieId> param1, int param2, int param3) {
+        public IsEnsembleAdheringToPlacementPolicyTest(List<BookieId> param1, int param2, int param3, String[] param4) {
             this.ensembleList = param1;
             this.writeQuorumSize = param2;
             this.ackQuorumSize = param3;
+
+            this.zones = param4;
         }
 
         @Before
@@ -110,10 +114,23 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
                 return;
             }
 
-            if(writeQuorumSize == desiredNumOfZones){
-                this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.MEETS_STRICT;
-            }else if(writeQuorumSize == minNumOfZones){
+            if(ensembleList.size() % writeQuorumSize != 0){
+                this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.FAIL;
+                return;
+            }
+
+            if(ensembleList.size() == minNumOfZones){
                 this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.MEETS_SOFT;
+
+            }else if(ensembleList.size() == desiredNumOfZones){
+                String[] tokens1 = zones[0].split("/");
+                String[] tokens2 = zones[1].split("/");
+
+                if(tokens1[1].equals(tokens2[1])){
+                    this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.MEETS_SOFT;
+                }else{
+                    this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.MEETS_STRICT;
+                }
             }else{
                 this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.FAIL;
             }
@@ -170,10 +187,11 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         public static Collection<Object[]> getTestParameters() {
             Object[][] params = {
                     //tests on params
-                    //{0, 1, 2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //es<ws<as
-                    {-1, -2, -3, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //negative
-                    {6, 5, 2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //not multiples
+                    {0, 1, 2, null, new HashSet<>()},
+                    {-1, -2, -2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //negative
                     {2, 1, 1, new LinkedHashMap<String, byte[]>(), null}, //excluded set null
+                    {2, -1, -1, null, null},
+                    {1, 0, 2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //wq 0
 
                     //tests on functionality: valid params + correct behavior
                     {2, 1, 0, null, new HashSet<>()},
@@ -244,11 +262,10 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         private Class<?> invalidArgsException() {
             Class<?> exception = null;
 
-            if (ensembleSize < 0 ||
-                    ensembleSize < writeQuorumSize ||
-                    writeQuorumSize < ackQuorumSize ||
-                    ensembleSize % writeQuorumSize != 0) {
+            if(writeQuorumSize == 0){
+                exception = ArithmeticException.class;
 
+            }else if (ensembleSize < 0 || ensembleSize % writeQuorumSize != 0) {
                 exception = IllegalArgumentException.class;
 
             }else if(excludeBookies == null){
@@ -390,11 +407,7 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
                 return;
             }
 
-            if(ackQuorumSize < 0 || ackQuorumSize > ackedBookies.size()){
-                this.expected = false;
-            }else {
-                this.expected = true;
-            }
+            this.expected = ackQuorumSize >= 0 && ackQuorumSize <= ackedBookies.size();
 
         }
 

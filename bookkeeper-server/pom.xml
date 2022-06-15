@@ -388,9 +388,11 @@
             <configuration>
               <targetClasses>
                 <param>org.apache.bookkeeper.client.ZoneawareEnsemblePlacementPolicyImpl</param>
+                <param>org.apache.bookkeeper.tools.cli.commands.bookies.RecoverCommand</param>
               </targetClasses>
               <targetTests>
                 <param>org.apache.bookkeeper.client.ZoneawareEnsemblePlacementPolicyImplTest</param>
+                <param>org.apache.bookkeeper.tools.cli.commands.bookies.RecoverCommandTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>java.util.logging</avoidCallsTo>

@@ -1,4 +1,4 @@
-package org.apache.bookkeeper.tools.cli.bookies;
+package org.apache.bookkeeper.tools.cli.commands.bookies;
 
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.apache.bookkeeper.client.BookKeeperAdmin;

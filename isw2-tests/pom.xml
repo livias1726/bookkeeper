@@ -17,14 +17,6 @@
         <!-- Maven -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-
-        <!-- Sonar -->
-        <!--
-        <sonar.organization>livias1726</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.junit.reportPaths>isw2-tests/target/coverage-reports/surefire-reports</sonar.junit.reportPaths>
-        <sonar.coverage.jacoco.xmlReportPaths>target/coverage-reports/jacoco-reports/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        -->
     </properties>
 
     <dependencies>
@@ -230,13 +222,6 @@
             <artifactId>org.jacoco.agent</artifactId>
             <version>0.8.8</version>
             <scope>test</scope>
-        </dependency>
-        <!-- Needed to avoid failure for integration-tests-topologies and integration-tests-utils -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>3.0.10</version>
-            <type>pom</type>
         </dependency>
     </dependencies>
 
