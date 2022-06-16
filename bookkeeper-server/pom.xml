@@ -27,10 +27,10 @@
 
   <!-- ISW2 -->
   <properties>
-    <target.class>target/classes/org/apache/bookkeeper</target.class>
+    <target.classes.dir>target/classes/org/apache/bookkeeper</target.classes.dir>
     <badua.agent>-javaagent:${badua.jar.agent} -Doutput.file=${badua.output}</badua.agent>
-    <badua.windows.cli> mkdir ${badua.report.dir.win} | java -jar ${badua.jar.cli} report -classes ${target.class} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.windows.cli>
-    <badua.unix.cli> mkdir ${badua.report.dir} | java -jar ${badua.jar.cli} report -classes ${target.class} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.unix.cli>
+    <badua.windows.cli> mkdir ${badua.report.dir.win} | java -jar ${badua.jar.cli} report -classes ${target.classes.dir} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.windows.cli>
+    <badua.unix.cli> mkdir ${badua.report.dir} | java -jar ${badua.jar.cli} report -classes ${target.classes.dir} -input ${badua.output} -xml ${badua.report.dir}/coverage.xml </badua.unix.cli>
   </properties>
 
   <dependencies>

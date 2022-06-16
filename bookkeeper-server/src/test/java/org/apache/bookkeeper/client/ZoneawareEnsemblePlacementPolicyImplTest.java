@@ -170,9 +170,10 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         //constant fields
         private final List<BookieId> availableSet = Arrays.asList(BookieId.parse("127.0.0.1:8000"),
                                                                   BookieId.parse("127.0.0.2:8000"));
-        private final String[] zones = {"/region-a/rack-1", "/region-b/rack-1"};
 
         private ZoneawareEnsemblePlacementPolicyImpl policy;
+        private final boolean enforceMinNumRacksPerWriteQuorum;
+        private final String[] zones;
 
         private final int ensembleSize;
         private final int writeQuorumSize;
@@ -187,28 +188,43 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         public static Collection<Object[]> getTestParameters() {
             Object[][] params = {
                     //tests on params
-                    {0, 1, 2, null, new HashSet<>()},
-                    {-1, -2, -2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //negative
-                    {2, 1, 1, new LinkedHashMap<String, byte[]>(), null}, //excluded set null
-                    {2, -1, -1, null, null},
-                    {1, 0, 2, new LinkedHashMap<String, byte[]>(), new HashSet<>()}, //wq 0
+                    {0, 1, 2, null, new HashSet<>(), false, new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
+                    {-1, -2, -2, new LinkedHashMap<String, byte[]>(), new HashSet<>(), false,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}}, //negative
+                    {2, 1, 1, new LinkedHashMap<String, byte[]>(), null, false,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}}, //excluded set null
+                    {2, -1, -1, null, null, false, new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
+                    {1, 0, 2, new LinkedHashMap<String, byte[]>(), new HashSet<>(), false,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}}, //wq 0
 
                     //tests on functionality: valid params + correct behavior
-                    {2, 1, 0, null, new HashSet<>()},
+                    {2, 1, 0, null, new HashSet<>(), false, new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
                     {1, 1, 1, Collections.singletonMap("property", "bytes".getBytes(StandardCharsets.UTF_8)),
-                            new HashSet<>(Collections.singletonList(BookieId.parse("127.0.0.1:8000")))},
-                    {2, 1, 1, null, new HashSet<>(Collections.singletonList(BookieId.parse("127.0.0.1:8000")))}, // not enough bookies
+                            new HashSet<>(Collections.singletonList(BookieId.parse("127.0.0.1:8000"))), false,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
+                    {2, 1, 1, null, new HashSet<>(Collections.singletonList(BookieId.parse("127.0.0.1:8000"))), false,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}}, // not enough bookies
+
+                    //with enforceMinNumRacksPerWriteQuorum
+                    {2, 1, 1, null, new HashSet<>(), false, new String[]{"/region-a/rack-1",
+                            NetworkTopology.DEFAULT_REGION_AND_RACK}}, //ok
+                    {2, 1, 1, null, new HashSet<>(), true, new String[]{"/region-a/rack-1",
+                            NetworkTopology.DEFAULT_REGION_AND_RACK}}, //not enough bookies
             };
 
             return Arrays.asList(params);
         }
 
-        public NewEnsembleTest(int param1, int param2, int param3, Map<String,byte[]> param4, HashSet<BookieId> param5) {
+        public NewEnsembleTest(int param1, int param2, int param3, Map<String,byte[]> param4, HashSet<BookieId> param5,
+                               boolean param6, String[] param7) {
             this.ensembleSize = param1;
             this.writeQuorumSize = param2;
             this.ackQuorumSize = param3;
             this.customMetadata = param4;
             this.excludeBookies = param5;
+
+            this.enforceMinNumRacksPerWriteQuorum = param6;
+            this.zones = param7;
         }
 
         @Before
@@ -231,10 +247,12 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
             ClientConfiguration conf = new ClientConfiguration();
             conf.setDesiredNumZonesPerWriteQuorum(writeQuorumSize); //avoids errors of misconfiguration on write quorum
             conf.setMinNumZonesPerWriteQuorum(writeQuorumSize-1); // --
+            conf.setEnforceMinNumRacksPerWriteQuorum(enforceMinNumRacksPerWriteQuorum);
             conf.setProperty(REPP_DNS_RESOLVER_CLASS, StaticDNSResolver.class.getName());
 
             policy.initialize(conf, Optional.empty(), null, DISABLE_ALL,
                     NullStatsLogger.INSTANCE, BookieSocketAddress.LEGACY_BOOKIEID_RESOLVER);
+            policy.withDefaultFaultDomain(NetworkTopology.DEFAULT_REGION_AND_RACK);
 
             policy.onClusterChanged(new HashSet<>(availableSet), new HashSet<>());
 
@@ -248,7 +266,11 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
 
             int available = availableSet.size();
             if(!excludeBookies.isEmpty()){
-                available -= excludedInAvailable();
+                available -= excludeFromAvailable();
+            }
+
+            if(enforceMinNumRacksPerWriteQuorum){
+                available -= excludeFromDefault();
             }
 
             if (available < ensembleSize) {
@@ -275,13 +297,29 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
             return exception;
         }
 
-        private int excludedInAvailable() {
+        private int excludeFromAvailable() {
             int tot = 0;
             for(BookieId exBid: excludeBookies){
                 for(BookieId avBid: availableSet){
                     if(avBid.toString().contains(exBid.toString())){
                         tot++;
                     }
+                }
+            }
+
+            return tot;
+        }
+
+        private int excludeFromDefault() {
+            int tot = 0;
+            for(String zone: zones){
+
+                if(tot >= availableSet.size()){
+                    break;
+                }
+
+                if(zone.equals(NetworkTopology.DEFAULT_REGION_AND_RACK)){
+                    tot++;
                 }
             }
 

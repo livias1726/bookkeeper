@@ -66,12 +66,12 @@ public class RecoverCommandTest {
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), invalidBookie, defaultLedger, false, false}, //parsing error
                 //true
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, 1, false, true}, //bkRecoveryLedger
-
-                /*
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, defaultLedger, false, false}, //bkRecovery
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, -12, true, false}, //bkQuery
+                /*
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, 22, false, true}, //bkRecoveryLedger
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, defaultLedger, false, true} //bkQuery
+
                  */
         };
 
