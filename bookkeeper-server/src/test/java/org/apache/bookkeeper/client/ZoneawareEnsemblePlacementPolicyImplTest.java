@@ -8,17 +8,14 @@ import org.junit.*;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mockito;
 
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static org.apache.bookkeeper.client.TopologyAwareEnsemblePlacementPolicy.REPP_DNS_RESOLVER_CLASS;
 import static org.apache.bookkeeper.feature.SettableFeatureProvider.DISABLE_ALL;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 /*EnsemblePlacementPolicy encapsulates the algorithm that bookkeeper client uses to select a number of bookies from the
     cluster as an ensemble for storing entries.*/
