@@ -8,6 +8,7 @@ import org.apache.bookkeeper.tools.cli.commands.bookies.RecoverCommand;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -68,11 +69,6 @@ public class RecoverCommandTest {
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, 1, false, true}, //bkRecoveryLedger
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, defaultLedger, false, false}, //bkRecovery
                 {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, -12, true, false}, //bkQuery
-                /*
-                {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, 22, false, true}, //bkRecoveryLedger
-                {new ServerConfiguration(), new RecoverCommand.RecoverFlags(), validBookie, defaultLedger, false, true} //bkQuery
-
-                 */
         };
 
         return Arrays.asList(params);
@@ -91,7 +87,10 @@ public class RecoverCommandTest {
 
     @Before
     public void setUp() {
-        this.rc = new RecoverCommand();
+       // this.rc = new RecoverCommand();
+
+        this.rc = Mockito.mock(RecoverCommand.class);
+        Mockito.when(rc.apply((ServerConfiguration) Mockito.any(), Mockito.any())).thenCallRealMethod();
 
         if(cmdFlags != null){
             setUpFlags();
@@ -133,6 +132,7 @@ public class RecoverCommandTest {
         try{
             boolean res = rc.apply(conf, cmdFlags);
             Assert.assertEquals(expected, res);
+
         }catch (Exception e){
             Assert.assertEquals(expectedException, e.getClass());
         }

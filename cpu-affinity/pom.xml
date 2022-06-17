@@ -66,14 +66,14 @@
         <artifactId>nar-maven-plugin</artifactId>
         <version>${nar-maven-plugin.version}</version>
 
-        <!-- CUSTOM ADDITION
+        <!-- CUSTOM ADDITION -->
         <configuration>
           <aol>x86-Windows-g++</aol>
           <linker>
             <name>g++</name>
           </linker>
         </configuration>
-        -->
+
 
         <extensions>true</extensions>
       </plugin>
@@ -127,14 +127,14 @@
             <artifactId>nar-maven-plugin</artifactId>
             <version>${nar-maven-plugin.version}</version>
 
-            <!-- CUSTOM ADDITION
+            <!-- CUSTOM ADDITION -->
             <configuration>
               <aol>x86-Windows-g++</aol>
               <linker>
                 <name>g++</name>
               </linker>
             </configuration>
-            -->
+
 
             <extensions>true</extensions>
             <executions>

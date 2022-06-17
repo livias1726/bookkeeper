@@ -8,14 +8,17 @@ import org.junit.*;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static org.apache.bookkeeper.client.TopologyAwareEnsemblePlacementPolicy.REPP_DNS_RESOLVER_CLASS;
 import static org.apache.bookkeeper.feature.SettableFeatureProvider.DISABLE_ALL;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 /*EnsemblePlacementPolicy encapsulates the algorithm that bookkeeper client uses to select a number of bookies from the
     cluster as an ensemble for storing entries.*/
@@ -36,6 +39,8 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         //constant fields
         private final int desiredNumOfZones = 2;
         private final int minNumOfZones = 1;
+
+        private static final String unresolved = NetworkTopology.DEFAULT_ZONE + NetworkTopology.DEFAULT_UPGRADEDOMAIN;
 
         private ZoneawareEnsemblePlacementPolicyImpl policy;
         private final String[] zones;
@@ -60,6 +65,10 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
                             new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
                     {Collections.singletonList(BookieId.parse("127.0.0.1:8000")), -2, -1, new String[]{"/region-a/rack-1"}},
                     {Collections.singletonList(BookieId.parse("127.0.0.1:8000")), 2, -2, new String[]{"/region-a/rack-1"}},
+
+                    //mutation
+                    {Arrays.asList(BookieId.parse("127.0.0.1:8000"), BookieId.parse("127.0.0.2:8000")), 2, 1,
+                            new String[]{unresolved, "/region-a/rack-2"}}, //unresolved location -> fail
             };
 
             return Arrays.asList(params);
@@ -114,7 +123,12 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
                 return;
             }
 
-            if(ensembleList.size() % writeQuorumSize != 0){
+            if(writeQuorumSize < minNumOfZones ||
+                    ensembleList.size() % writeQuorumSize != 0 ||
+                    zones == null ||
+                    zones.length == 0 ||
+                    zones[0].equals(unresolved)){
+
                 this.expected = EnsemblePlacementPolicy.PlacementPolicyAdherence.FAIL;
                 return;
             }
@@ -210,6 +224,11 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
                             NetworkTopology.DEFAULT_REGION_AND_RACK}}, //ok
                     {2, 1, 1, null, new HashSet<>(), true, new String[]{"/region-a/rack-1",
                             NetworkTopology.DEFAULT_REGION_AND_RACK}}, //not enough bookies
+
+                    //mutation
+                    {10, 3, 2, null, new HashSet<>(), true,
+                            new String[]{"/region-a/rack-1", "/region-b/rack-1"}}, //not multiple
+                    {2, 1, 1, null, new HashSet<>(), false, new String[]{"/region-a/rack-1", "/region-b/rack-1"}},
             };
 
             return Arrays.asList(params);
@@ -330,6 +349,7 @@ public class ZoneawareEnsemblePlacementPolicyImplTest {
         public void newEnsembleTest() {
             Assume.assumeTrue(expectedException == null);
             try {
+
                 EnsemblePlacementPolicy.PlacementResult<List<BookieId>> res =
                         policy.newEnsemble(ensembleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookies);
 
