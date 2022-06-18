@@ -4,11 +4,9 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.apache.bookkeeper.client.BookKeeperAdmin;
 import org.apache.bookkeeper.conf.ClientConfiguration;
 import org.apache.bookkeeper.conf.ServerConfiguration;
-import org.apache.bookkeeper.tools.cli.commands.bookies.RecoverCommand;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -19,7 +17,7 @@ public class RecoverCommandTest {
 
     //constant fields
     private static final String validBookie = "127.0.0.1:8000";
-    private static final String invalidBookie = "ReadOnly"; //parsing error on BookieId.parse(): ![a-zA-Z0-9:-_.\\-]+ OR !readonly
+    private static final String invalidBookie = "ReadOnly"; //parsing error on BookieId.parse(): ![a-zA-Z0-9:-_.\\-]+ OR readonly
     private static final long defaultLedger = -1L; //default ledger
 
     private RecoverCommand rc;
@@ -87,10 +85,7 @@ public class RecoverCommandTest {
 
     @Before
     public void setUp() {
-       // this.rc = new RecoverCommand();
-
-        this.rc = Mockito.mock(RecoverCommand.class);
-        Mockito.when(rc.apply((ServerConfiguration) Mockito.any(), Mockito.any())).thenCallRealMethod();
+        this.rc = new RecoverCommand();
 
         if(cmdFlags != null){
             setUpFlags();

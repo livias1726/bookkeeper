@@ -232,7 +232,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>report</id>
+                        <id>report-ut</id>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
@@ -241,6 +241,18 @@
                             <outputDirectory>${jacoco.report.dir}</outputDirectory>
                         </configuration>
                     </execution>
+                    <!--
+                    <execution>
+                        <id>report-it</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <outputDirectory>${jacoco.report.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    -->
                 </executions>
             </plugin>
         </plugins>

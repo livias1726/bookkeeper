@@ -1254,6 +1254,21 @@
       <id>isw2-coverage</id>
       <build>
         <plugins>
+          <!--
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.0.0-M6</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          -->
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -1265,20 +1280,14 @@
                   <goal>prepare-agent</goal>
                 </goals>
               </execution>
-              <!--  Integration-tests executed with failsafe-plugin  -->
-              <!--
+              <!-- Integration-tests executed with failsafe-plugin
               <execution>
-                  <id>prepare-agent-it</id>
-                  <phase>package</phase>
-                  <goals>
-                      <goal>prepare-agent-integration</goal>
-                  </goals>
-                  <configuration>
-                      <append>true</append>
-                      <destFile>${coverage.reportDir}/jacoco-it.exec</destFile>
-                  </configuration>
+                <id>prepare-agent-it</id>
+                <goals>
+                  <goal>prepare-agent-integration</goal>
+                </goals>
               </execution>
-               -->
+              -->
             </executions>
           </plugin>
         </plugins>
